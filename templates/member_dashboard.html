@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard - EQR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="text-center mb-4">Member Dashboard</h1>
+    <a href="/" class="btn btn-outline-primary mb-4 d-block text-center">Logout</a>
+
+    <!-- Self-Assessment Form Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2 class="card-title mb-3">Self-Assessment Form</h2>
+        <form id="assessment-form">
+          <div class="mb-3">
+            <label class="form-label">Are you physically hurt?</label>
+            <select name="hurt_status" class="form-select" required>
+              <option value="">Select</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="unsure">I'm not sure</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-danger w-100">Submit Assessment</button>
+        </form>
+        <div id="assessment-response" class="mt-3 text-center"></div>
+      </div>
+    </div>
+
+    <!-- Training Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2 class="card-title mb-3">Training Section</h2>
+        <ul class="list-group">
+          {% for training in trainings %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <p class="mb-1">{{ training[0] }} - {{ training[1] }} ({{ training[2] }})</p>
+                <small class="text-muted">Caption: Learn essential skills for emergency response in this training session held in {{ training[2] }}.</small>
+              </div>
+              <img src="{{ url_for('static', filename='images/' ~ training[0]|replace(' ', '_')|lower ~ '.jpg') }}" alt="{{ training[0] }} Image" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Submission Report Section -->
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title mb-3">Submission Report</h2>
+        <form id="report-form">
+          <!-- Location -->
+          <div class="mb-3">
+            <label class="form-label">Location</label>
+            <div class="row">
+              <div class="col-md-6">
+                <select name="state" class="form-select mb-2" required>
+                  <option value="">Select State</option>
+                  <option value="Sagaing">Sagaing</option>
+                  <option value="Mandalay">Mandalay</option>
+                  <option value="Yangon">Yangon</option>
+                  <option value="Shan">Shan</option>
+                  <option value="Kachin">Kachin</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <select name="township" class="form-select" required>
+                  <option value="">Select Township (Mandalay)</option>
+                  <option value="Aungmyethazan">Aungmyethazan</option>
+                  <option value="Chanayethazan">Chanayethazan</option>
+                  <option value="Mahaaungmye">Mahaaungmye</option>
+                  <option value="Pyigyidagun">Pyigyidagun</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Type of Need -->
+          <div class="mb-3">
+            <label class="form-label">Type of Need</label>
+            <div class="row">
+              <div class="col-md-6">
+                <select name="primary_need" class="form-select" required aria-placeholder="Primary Need">
+                  <option value="">Primary Need</option>
+                  <option value="food">FOOD</option>
+                  <option value="shelter">Shelter</option>
+                  <option value="wash">WASH</option>
+                  <option value="children">Children</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <select name="secondary_need" class="form-select" required aria-placeholder="Secondary Need">
+                  <option value="">Secondary Need</option>
+                  <option value="food">FOOD</option>
+                  <option value="shelter">Shelter</option>
+                  <option value="wash">WASH</option>
+                  <option value="children">Children</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Damage Infrastructure -->
+          <div class="mb-3">
+            <label class="form-label">Damage Infrastructure</label>
+            <div class="row">
+              <div class="col-md-6">
+                <select name="damage_type" class="form-select mb-2" required>
+                  <option value="">Select Type</option>
+                  <option value="road">Road</option>
+                  <option value="building">Building</option>
+                  <option value="bridge">Bridge</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <input type="text" name="damage_name" class="form-control" placeholder="Infrastructure Name" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location with Map -->
+          <div class="mb-3">
+            <label class="form-label">Location with Map</label>
+            <div id="map" class="w-100 mb-2" style="height: 300px; border-radius: 5px; overflow: hidden;"></div>
+            <input type="hidden" name="latitude" id="latitude" required>
+            <input type="hidden" name="longitude" id="longitude" required>
+            <p class="text-muted">Click on the map to select a location. Lat: <span id="lat-display">N/A</span>, Lon: <span id="lon-display">N/A</span></p>
+          </div>
+
+          <!-- Cause of Inaccessibility -->
+          <div class="mb-3">
+            <label class="form-label">Cause of Inaccessibility</label>
+            <select name="inaccessibility_cause" class="form-select" required>
+              <option value="">Select Cause</option>
+              <option value="security">Security</option>
+              <option value="disaster">Damage by Disaster</option>
+            </select>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-danger w-100">Submit Report</button>
+        </form>
+        <div id="report-response" class="mt-3 text-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Leaflet map
+    const map = L.map('map').setView([22.0, 95.0], 6); // Centered on Myanmar
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Handle map click to update lat/lon
+    map.on('click', function(e) {
+      const lat = e.latlng.lat.toFixed(4);
+      const lon = e.latlng.lng.toFixed(4);
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lon;
+      document.getElementById('lat-display').textContent = lat + ' N';
+      document.getElementById('lon-display').textContent = lon + ' E';
+    });
+
+    document.getElementById('assessment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      const responseDiv = document.getElementById('assessment-response');
+      const response = await fetch('/api/submit_assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      responseDiv.textContent = result.message;
+    });
+
+    document.getElementById('report-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      const responseDiv = document.getElementById('report-response');
+      const response = await fetch('/api/submit_report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      responseDiv.textContent = result.message;
+    });
+  </script>
+</body>
+</html>

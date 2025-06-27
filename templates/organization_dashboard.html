@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; }
+        .filter-button { @apply px-4 py-2 border rounded mr-2; }
+        .filter-button.active { @apply bg-blue-500 text-white; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; background-color: #d1d5db; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Organization Dashboard</h1>
+
+        <!-- Interactive Map Display -->
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-2">Interactive Map Display</h2>
+            <div class="mb-4">
+                <label class="mr-2">Filter by Need Type:</label>
+                <button class="filter-button" onclick="filterMap('all')">All</button>
+                <button class="filter-button" onclick="filterMap('Food')">Food</button>
+                <button class="filter-button" onclick="filterMap('WASH')">WASH</button>
+                <button class="filter-button" onclick="filterMap('Shelter')">Shelter</button>
+                <button class="filter-button" onclick="filterMap('Children')">Children</button>
+                <button class="filter-button" onclick="filterMap('Others')">Others</button>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <!-- Partner List -->
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-2">Partner List</h2>
+            <div class="flex justify-between mb-4">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="partner-checkbox" class="form-checkbox">
+                    <span class="ml-2">Do you want to partner the response?</span>
+                </label>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gray-200 p-4 rounded">Suggested Partner 1 Summary</div>
+                <div class="bg-gray-200 p-4 rounded">Suggested Partner 2 Summary</div>
+                <div class="bg-gray-200 p-4 rounded">Suggested Partner 3 Summary</div>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-2">Recent Reports</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-200 p-4 rounded">
+                    <p>Rapid Need Assessment for Town X</p>
+                    <p>Date: DD.MM.YYYY</p>
+                    <p>Published by: Organization X</p>
+                    <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2">View</button>
+                    <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2 ml-2">Download</button>
+                </div>
+                <div class="bg-gray-200 p-4 rounded">
+                    <p>Situational Update Report for Town X</p>
+                    <p>Date: DD.MM.YYYY</p>
+                    <p>Published by: Organization X</p>
+                    <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2">View</button>
+                    <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2 ml-2">Download</button>
+                </div>
+            </div>
+            <p class="mt-4 text-blue-500 cursor-pointer">Click to view all reports regarding XXX hazard on DD.MM.YYYY event</p>
+        </div>
+
+        <!-- Organization Chart -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-2">Organization Chart</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="avatar mx-auto"></div>
+                    <p class="mt-2">Regional Director for Humanitarian Activities</p>
+                </div>
+                <div class="text-center">
+                    <div class="avatar mx-auto"></div>
+                    <p class="mt-2">Local Director for Humanitarian Activities</p>
+                </div>
+                <div class="text-center">
+                    <div class="avatar mx-auto"></div>
+                    <p class="mt-2">Local Disaster Frontline Response Volunteer Teams</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize Map
+        const map = L.map('map').setView([16.8409, 96.1704], 6); // Centered on Myanmar
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Fetch and plot submission reports using latitude and longitude
+        async function loadReports() {
+            const response = await fetch('/api/reports');
+            const reports = await response.json();
+            reports.forEach(report => {
+                if (report.latitude && report.longitude && !isNaN(report.latitude) && !isNaN(report.longitude)) {
+                    const marker = L.marker([report.latitude, report.longitude]).addTo(map)
+                        .bindPopup(`Need: ${report.need_type}<br>Detail: ${report.need_detail}`);
+                    markers.push(marker);
+                }
+            });
+        }
+        let markers = [];
+        loadReports();
+
+        // Filter Map by need type using latitude and longitude from reports
+        function filterMap(needType) {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            fetch('/api/reports')
+                .then(response => response.json())
+                .then(reports => {
+                    reports.forEach(report => {
+                        if (needType === 'all' || report.need_type === needType) {
+                            if (report.latitude && report.longitude && !isNaN(report.latitude) && !isNaN(report.longitude)) {
+                                const marker = L.marker([report.latitude, report.longitude]).addTo(map)
+                                    .bindPopup(`Need: ${report.need_type}<br>Detail: ${report.need_detail}`);
+                                markers.push(marker);
+                            }
+                        }
+                    });
+                });
+            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="filterMap('${needType}')"]`).classList.add('active');
+        }
+        filterMap('all');
+    </script>
+</body>
+</html>
