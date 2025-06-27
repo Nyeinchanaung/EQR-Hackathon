@@ -29,12 +29,21 @@ def init_db():
     c.execute("INSERT OR IGNORE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("First Aid Basics", "2025-07-01", "Yangon"))
     c.execute("INSERT OR IGNORE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("Disaster Preparedness", "2025-07-15", "Mandalay"))
     c.execute("INSERT OR IGNORE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("Evacuation Drills", "2025-08-01", "Shan"))
+
     
     # Insert demo submission reports
     c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-              (1, "Yangon", "Hlaing", "Food", "Food shortage", "Road", "Main Road", 16.8409, 96.1704, "Damage by Disaster", "2025-06-27 15:00:00"))
+              (1, "Yangon", "Hlaing", "primary", "food", "road", "Main Road", 16.8409, 96.1704, "Damage by Disaster", "2025-06-27 15:00:00"))
     c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-              (1, "Mandalay", "Aungmyethazan", "Shelter", "Temporary shelters needed", "Building", "School", 21.9747, 96.0836, "Security", "2025-06-27 14:00:00"))
+              (1, "Mandalay", "Aungmyethazan", "primary", "shelter", "building", "School", 21.9747, 96.0836, "security", "2025-06-27 14:00:00"))
+    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+              (1, "Sagaing", "Monywa", "secondary", "wash", "bridge", "Sagaing Bridge", 22.1167, 95.1333, "Damage by Disaster", "2025-06-27 13:00:00"))
+    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+              (1, "Shan", "Taunggyi", "primary", "children", "road", "Highway 45", 20.7892, 97.0378, "security", "2025-06-27 12:00:00"))
+    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+              (1, "Kachin", "Myitkyina", "secondary", "others", "building", "Hospital", 25.3833, 97.3964, "Damage by Disaster", "2025-06-27 11:00:00"))
+    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+              (1, "Yangon", "South Okkalapa", "primary", "food", "road", "Main Road", 16.8409, 96.1704, "Damage by Disaster", "2025-06-27 10:00:00"))   
     
     conn.commit()
     conn.close()
@@ -140,7 +149,7 @@ def organization_dashboard():
 def get_reports():
     conn = sqlite3.connect('eqr.db')
     c = conn.cursor()
-    c.execute("SELECT need_type, need_detail, latitude, longitude FROM submission_reports")
+    c.execute("SELECT need_type, need_detail, latitude, longitude FROM submission_reports WHERE latitude != 0.0 AND longitude != 0.0")
     reports = [{"need_type": row[0], "need_detail": row[1], "latitude": row[2], "longitude": row[3]} for row in c.fetchall()]
     conn.close()
     return jsonify(reports)

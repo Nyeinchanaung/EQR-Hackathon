@@ -102,8 +102,9 @@
         async function loadReports() {
             const response = await fetch('/api/reports');
             const reports = await response.json();
+            console.log('Fetched reports:', reports); // Debug log
             reports.forEach(report => {
-                if (report.latitude && report.longitude && !isNaN(report.latitude) && !isNaN(report.longitude)) {
+                if (report.latitude && report.longitude && !isNaN(report.latitude) && !isNaN(report.longitude) && report.latitude !== 0 && report.longitude !== 0) {
                     const marker = L.marker([report.latitude, report.longitude]).addTo(map)
                         .bindPopup(`Need: ${report.need_type}<br>Detail: ${report.need_detail}`);
                     markers.push(marker);
@@ -120,9 +121,10 @@
             fetch('/api/reports')
                 .then(response => response.json())
                 .then(reports => {
+                    console.log('Filtering reports:', reports); // Debug log
                     reports.forEach(report => {
                         if (needType === 'all' || report.need_type === needType) {
-                            if (report.latitude && report.longitude && !isNaN(report.latitude) && !isNaN(report.longitude)) {
+                            if (report.latitude && report.longitude && !isNaN(report.latitude) && !isNaN(report.longitude) && report.latitude !== 0 && report.longitude !== 0) {
                                 const marker = L.marker([report.latitude, report.longitude]).addTo(map)
                                     .bindPopup(`Need: ${report.need_type}<br>Detail: ${report.need_detail}`);
                                 markers.push(marker);
