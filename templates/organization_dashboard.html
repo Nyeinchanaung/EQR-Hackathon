@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organization Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         #map { height: 400px; }
@@ -15,8 +16,13 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4">
-      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EQR Logo" class="img-fluid mx-auto d-block" style="max-width: 100px; max-height: 100px;" class="mb-4">
-    
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EQR Logo" class="img-fluid mx-auto d-block" style="max-width: 160px; max-height: 100px;" class="mb-4">
+        
+      <h1 class="text-3xl font-bold mb-4">EQR (Emergency Quick Response)</h1>
+          <p class="mb-4">EQR is a platform designed to meet the needs of affected communities and to help local and international stakeholders during and after natural hazards in Myanmar. It is designed to support resource mobilization, optimize evacuation, and enhance disaster responses.</p>
+          <p class="mb-6">Login to access the EQR platform designed to support emergency responses in Myanmar.</p>
+      <a href="/" class="btn btn-outline-primary mb-4 d-block text-center">Logout</a>
+        <!-- Organization Dashboard -->
       <h1 class="text-center text-3xl font-bold mb-4">Organization Dashboard</h1>
 
         <!-- Interactive Map Display -->
