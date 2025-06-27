@@ -42,9 +42,9 @@
                 </label>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-gray-200 p-4 rounded">Suggested Partner 1 Summary</div>
-                <div class="bg-gray-200 p-4 rounded">Suggested Partner 2 Summary</div>
-                <div class="bg-gray-200 p-4 rounded">Suggested Partner 3 Summary</div>
+                <div class="bg-gray-200 p-4 rounded">IOM (International Organization for Migration)</div>
+                <div class="bg-gray-200 p-4 rounded">ActionAid</div>
+                <div class="bg-gray-200 p-4 rounded">Myanmar Disaster Preparedness Agency (MDPA)</div>
             </div>
         </div>
 
@@ -53,37 +53,38 @@
             <h2 class="text-xl font-semibold mb-2">Recent Reports</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-gray-200 p-4 rounded">
-                    <p>Rapid Need Assessment for Town X</p>
-                    <p>Date: DD.MM.YYYY</p>
-                    <p>Published by: Organization X</p>
+                    <p>Rapid Need Assessment for Yangon</p>
+                    <p>Date: Today</p>
+                    <p>Published by: IOM (International Organization for Migration)</p>
                     <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2">View</button>
                     <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2 ml-2">Download</button>
                 </div>
                 <div class="bg-gray-200 p-4 rounded">
-                    <p>Situational Update Report for Town X</p>
-                    <p>Date: DD.MM.YYYY</p>
-                    <p>Published by: Organization X</p>
+                    <p>Situational Update Report for Mandalay</p>
+                    <p>Date: 20.06.2025</p>
+                    <p>Published by: ActionAid</p>
                     <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2">View</button>
                     <button class="bg-blue-500 text-white px-2 py-1 rounded mt-2 ml-2">Download</button>
                 </div>
             </div>
-            <p class="mt-4 text-blue-500 cursor-pointer">Click to view all reports regarding XXX hazard on DD.MM.YYYY event</p>
+            <p class="mt-4 text-blue-500 cursor-pointer">Click to view all reports regarding Earthquake hazard on 20.06.2025 event</p>
         </div>
 
+        <!-- Organization Chart -->
         <!-- Organization Chart -->
         <div class="bg-white p-6 rounded-lg shadow">
             <h2 class="text-xl font-semibold mb-2">Organization Chart</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="text-center">
-                    <div class="avatar mx-auto"></div>
+                    <img src="{{ url_for('static', filename='images/a.png') }}" class="avatar mx-auto" alt="Regional Director Avatar">
                     <p class="mt-2">Regional Director for Humanitarian Activities</p>
                 </div>
                 <div class="text-center">
-                    <div class="avatar mx-auto"></div>
+                    <img src="{{ url_for('static', filename='images/b.png') }}" class="avatar mx-auto" alt="Local Director Avatar">
                     <p class="mt-2">Local Director for Humanitarian Activities</p>
                 </div>
                 <div class="text-center">
-                    <div class="avatar mx-auto"></div>
+                    <img src="{{ url_for('static', filename='images/c.png') }}" class="avatar mx-auto" alt="Volunteer Teams Avatar">
                     <p class="mt-2">Local Disaster Frontline Response Volunteer Teams</p>
                 </div>
             </div>
