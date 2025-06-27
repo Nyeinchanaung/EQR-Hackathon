@@ -22,27 +22,27 @@ def init_db():
                  (id INTEGER PRIMARY KEY, title TEXT, date TEXT, location TEXT)''')
     
     # Insert demo users
-    c.execute("INSERT OR IGNORE INTO users (username, password, role) VALUES (?, ?, ?)", ("member1", "pass123", "member"))
-    c.execute("INSERT OR IGNORE INTO users (username, password, role) VALUES (?, ?, ?)", ("org1", "orgpass", "organization"))
+    c.execute("INSERT OR REPLACE INTO users (username, password, role) VALUES (?, ?, ?)", ("member1", "pass123", "member"))
+    c.execute("INSERT OR REPLACE INTO users (username, password, role) VALUES (?, ?, ?)", ("org1", "orgpass", "organization"))
     
     # Insert demo training events
-    c.execute("INSERT OR IGNORE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("First Aid Basics", "2025-07-01", "Yangon"))
-    c.execute("INSERT OR IGNORE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("Disaster Preparedness", "2025-07-15", "Mandalay"))
-    c.execute("INSERT OR IGNORE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("Evacuation Drills", "2025-08-01", "Shan"))
+    c.execute("INSERT OR REPLACE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("First Aid Basics", "2025-07-01", "Yangon"))
+    c.execute("INSERT OR REPLACE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("Disaster Preparedness", "2025-07-15", "Mandalay"))
+    c.execute("INSERT OR REPLACE INTO training_events (title, date, location) VALUES (?, ?, ?)", ("Evacuation Drills", "2025-08-01", "Shan"))
 
     
     # Insert demo submission reports
-    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    c.execute("INSERT OR REPLACE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               (1, "Yangon", "Hlaing", "primary", "food", "road", "Main Road", 16.8409, 96.1704, "Damage by Disaster", "2025-06-27 15:00:00"))
-    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    c.execute("INSERT OR REPLACE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               (1, "Mandalay", "Aungmyethazan", "primary", "shelter", "building", "School", 21.9747, 96.0836, "security", "2025-06-27 14:00:00"))
-    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    c.execute("INSERT OR REPLACE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               (1, "Sagaing", "Monywa", "secondary", "wash", "bridge", "Sagaing Bridge", 22.1167, 95.1333, "Damage by Disaster", "2025-06-27 13:00:00"))
-    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    c.execute("INSERT OR REPLACE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               (1, "Shan", "Taunggyi", "primary", "children", "road", "Highway 45", 20.7892, 97.0378, "security", "2025-06-27 12:00:00"))
-    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    c.execute("INSERT OR REPLACE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               (1, "Kachin", "Myitkyina", "secondary", "others", "building", "Hospital", 25.3833, 97.3964, "Damage by Disaster", "2025-06-27 11:00:00"))
-    c.execute("INSERT OR IGNORE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    c.execute("INSERT OR REPLACE INTO submission_reports (user_id, state, township, need_type, need_detail, damage_type, damage_name, latitude, longitude, inaccessibility_cause, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
               (1, "Yangon", "South Okkalapa", "primary", "food", "road", "Main Road", 16.8409, 96.1704, "Damage by Disaster", "2025-06-27 10:00:00"))   
     
     conn.commit()
